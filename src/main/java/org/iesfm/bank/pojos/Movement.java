@@ -2,24 +2,30 @@ package org.iesfm.bank.pojos;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Date;
 import java.util.Objects;
+
 @Entity
 public class Movement {
     @Id
-    private int id;
+    @GeneratedValue
+    private Integer id;
+    @Column(nullable = false)
     private String iban;
-    @Column(name = "movement_date")
+    @Column(name = "movement_date", nullable = false)
     private Date movementDate;
+    @Column(nullable = false)
     private double amount;
+    @Column(nullable = false)
     private String description;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

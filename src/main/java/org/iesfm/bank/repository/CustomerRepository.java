@@ -5,4 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     boolean existsByNif(String nif);
+
+    int deleteByNif(String nif);
+
+    Customer findOneBynif(String nif);
+
 }
