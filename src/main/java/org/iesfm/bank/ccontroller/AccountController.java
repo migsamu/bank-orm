@@ -28,6 +28,14 @@ public class AccountController {
         return accountRepository.findAll();
     }
 
+    @RequestMapping(method = RequestMethod.POST, path = "/accounts/{iban}")
+    public Account getAccountById(@PathVariable("iban") String iban) {
+        Account account = accountRepository.findOneByIban(iban);
+        if (account == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cuenta no encontrada");
+        }
+        return account;
+    }
 
     @RequestMapping(method = RequestMethod.GET, path = "/customers/{nif}/accounts")
     public void insertAccount(@PathVariable("nif") String customerNif, @RequestBody Account account) {

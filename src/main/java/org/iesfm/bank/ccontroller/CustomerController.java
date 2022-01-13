@@ -42,7 +42,7 @@ public class CustomerController {
 
     @RequestMapping(method = RequestMethod.GET, path = "/customers/{nif}")
     public Customer getCustomer(@PathVariable("nif") String nif) {
-        Customer customer = customerRepository.findOneBynif(nif);
+        Customer customer = customerRepository.findOneByNif(nif);
         if (customer == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado");
         } else {

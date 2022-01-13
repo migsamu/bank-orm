@@ -8,6 +8,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     int deleteByNif(String nif);
 
-    Customer findOneBynif(String nif);
+    Customer findOneByNif(String nif);
 
 }

@@ -16,8 +16,8 @@ public class Account {
     private double balance;
     @Column(name = "open_date", nullable = false)
     private Date openDate;
-    @OneToMany
-    @JoinColumn(name = "iban", referencedColumnName = "iban")
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "iban")
+   // @JoinColumn(name = "iban", referencedColumnName = "iban")
     @Column(nullable = false)
     private List<Movement> movements;
 
