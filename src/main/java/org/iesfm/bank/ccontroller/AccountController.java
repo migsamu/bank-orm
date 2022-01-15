@@ -4,6 +4,7 @@ import org.iesfm.bank.pojos.Account;
 import org.iesfm.bank.repository.AccountRepository;
 import org.iesfm.bank.repository.CustomerRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 public class AccountController {
 
@@ -28,13 +30,21 @@ public class AccountController {
         return accountRepository.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/accounts/{iban}")
-    public Account getAccountById(@PathVariable("iban") String iban) {
-        Account account = accountRepository.findOneByIban(iban);
-        if (account == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cuenta no encontrada");
+    @Transactional
+    @RequestMapping(method = RequestMethod.DELETE, path = "/accounts/{iban}")
+    public void delete(@PathVariable("iban") String iban) {
+        int deletedRows = accountRepository.deleteByIban(iban);
+        if (deletedRows == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "");
         }
-        return account;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/accounts/{iban}")
+    public Account getAccount(@PathVariable("iban") String iban) {
+        Optional<Account> account = accountRepository.findById(iban);
+
+        return account
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ""));
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/customers/{nif}/accounts")
@@ -48,5 +58,12 @@ public class AccountController {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "");
         }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/customers/{nif}/accounts")
+    public List<Account> list(
+            @PathVariable("nif") String customerNif
+    ) {
+        return accountRepository.findByNif(customerNif);
     }
 }
